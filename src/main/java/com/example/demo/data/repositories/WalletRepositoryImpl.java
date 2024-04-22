@@ -2,7 +2,6 @@ package com.example.demo.data.repositories;
 
 
 import com.example.demo.data.entities.wallet.UserWalletEntity;
-import com.example.demo.domain.exceptions.TransferException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -14,7 +14,7 @@ public class Transfer {
     private final User toAccount;
 
     public Transfer(User fromAccount, User toAccount, double amount) {
-        this.id = Utils.randomUUID();;
+        this.id = Utils.randomUUID();
         this.amount = this.roundValue(amount);
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;

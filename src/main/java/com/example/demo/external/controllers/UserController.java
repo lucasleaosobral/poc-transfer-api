@@ -3,6 +3,9 @@ package com.example.demo.external.controllers;
 
 import com.example.demo.external.inputs.CreateUserCommand;
 import com.example.demo.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,9 @@ public class UserController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar novo usuario", description = "Cria um novo usuario", responses = {
+            @ApiResponse(description = "Successful response with location header", responseCode = "200", content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity createUser(@RequestBody @Valid CreateUserCommand createUserCommand) {
 
         Long id = userService.createUser(createUserCommand);

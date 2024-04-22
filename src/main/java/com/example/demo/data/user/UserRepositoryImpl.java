@@ -35,7 +35,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getById(Long id) {
         Optional<UserEntity> user = userJpaRepository.findById(id);
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new UserException("user: " + id + " not found");
         }
 

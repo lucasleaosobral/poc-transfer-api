@@ -22,6 +22,7 @@ public class UserDataMapper {
     public User userEntityToUserDomain(UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
+                .mail(userEntity.getEmail())
                 .accountType(userEntity.getAccountType())
                 .wallet(buildUserWallet(userEntity.getWallet()))
                 .build();

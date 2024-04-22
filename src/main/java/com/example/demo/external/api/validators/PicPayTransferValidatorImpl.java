@@ -1,11 +1,7 @@
 package com.example.demo.external.api.validators;
 
-import com.example.demo.domain.exceptions.ExternalServiceException;
+import com.example.demo.external.api.ApiResponse;
 import lombok.extern.log4j.Log4j2;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
@@ -13,29 +9,17 @@ import java.util.UUID;
 @Log4j2
 public class PicPayTransferValidatorImpl implements TransferValidatorService{
 
-    private final CloseableHttpClient client;
+    private final PicPayTransferValidatorService client;
 
-    //todo adicionar no arquivo de conf
-    private final String API_URL =  "https://run.mocky.io/v3/";
-
-    public PicPayTransferValidatorImpl(CloseableHttpClient client) {
+    public PicPayTransferValidatorImpl(PicPayTransferValidatorService client) {
         this.client = client;
     }
 
     @Override
     public boolean validate(UUID transferId) {
 
-        HttpGet request = new HttpGet(API_URL + transferId);
+        ApiResponse response = client.validate(transferId);
 
-        try (ClassicHttpResponse response = client.execute(request)){
-
-            if(HttpStatus.OK.value() == response.getCode())
-                return true;
-
-        }catch (Exception e){
-            log.info(e.getMessage());
-            throw new ExternalServiceException("Error while validating transfer " + transferId);
-        }
-        return false;
+        return response.message().equalsIgnoreCase("autorizado");
     }
 }
