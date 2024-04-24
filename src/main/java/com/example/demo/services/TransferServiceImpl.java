@@ -37,12 +37,10 @@ public class TransferServiceImpl implements TransferService {
 
         Transfer transfer = new Transfer(fromUser, toUser, transferAmountCommand.getValue());
 
-        if(!transfer.isValid()) {
-            throw new TransferException("This transfer is invalid");
-        }
+        transfer.isValid();
 
         if(!transferValidatorService.validate(transfer.getId()))
-                throw new TransferException("this transfer is invalid");
+                throw new TransferException("Transfer unauthorized");
 
         userWalletService.transferAmount(fromUser.getWallet().getId(), toUser.getWallet().getId(), transfer.getAmount());
 

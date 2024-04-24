@@ -10,4 +10,6 @@ public interface UserWalletService {
     UserWalletEntity createUserWallet();
 
     void transferAmount(UUID walletFromId, UUID walletToId, BigDecimal amount);
+
+    void addAmount(UUID walletId, BigDecimal amount);
 }

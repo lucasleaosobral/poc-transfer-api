@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.domain.exceptions.TransferException;
 import com.example.demo.utils.Utils;
 
 import java.math.BigDecimal;
@@ -20,24 +21,32 @@ public class Transfer {
         this.toAccount = toAccount;
     }
 
-    public boolean isValid() {
-        return this.fromAccount.canTransfer()
-                && isNewBalanceValid()
-                && isAmountGreaterThanZero()
-                && isNotTheSameAccount();
+    public void isValid() {
+        isNotTheSameAccount();
+        canTransfer();
+        isNewBalanceValid();
+        isAmountGreaterThanZero();
     }
 
-    private boolean isNewBalanceValid() {
-        return this.fromAccount.getWallet().getBalance()
-                .subtract(this.amount).compareTo(BigDecimal.ZERO) >= 0;
+    private void canTransfer() {
+        if(this.fromAccount.getAccountType().equals(AccountType.STORE))
+            throw new TransferException("Stores can't transfer money.");
     }
 
-    private boolean isNotTheSameAccount() {
-        return this.fromAccount.getId() != this.toAccount.getId();
+    private void isNewBalanceValid() {
+        if(this.fromAccount.getWallet().getBalance()
+                .subtract(this.amount).compareTo(BigDecimal.ZERO) < 0)
+            throw new TransferException("Not enough balance.");
     }
 
-    private boolean isAmountGreaterThanZero() {
-        return this.amount.compareTo(BigDecimal.ZERO) > 0;
+    private void isNotTheSameAccount() {
+        if(this.fromAccount.getId() == this.toAccount.getId())
+            throw new TransferException("Transfer destination is invalid.");
+    }
+
+    private void isAmountGreaterThanZero() {
+        if(this.amount.compareTo(BigDecimal.ZERO) <= 0)
+            throw new TransferException("Transfer amount is not greater than zero.");
     }
 
     private BigDecimal roundValue(double amount) {

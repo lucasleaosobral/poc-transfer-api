@@ -31,5 +31,12 @@ public class WalletRepositoryImpl implements WalletRepository {
 
     }
 
+    @Override
+    public void addAmount(UUID walletId, BigDecimal amount) {
+        UserWalletEntity wallet = walletJpaRepository.findById(walletId).get();
+        wallet.updateBalance(wallet.getBalance().add(amount));
+        walletJpaRepository.save(wallet);
+    }
+
 
 }

@@ -22,10 +22,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Long id) {
-        return new ResponseEntity(null, null, HttpStatus.OK);
-    }
 
     @PostMapping
     @Operation(summary = "Criar novo usuario", description = "Cria um novo usuario", responses = {

@@ -31,4 +31,10 @@ public class UserWalletServiceImpl implements UserWalletService {
     public void transferAmount(UUID from, UUID to, BigDecimal amount) {
         walletRepository.transferAmount(from, to, amount);
     }
+
+    @Override
+    public void addAmount(UUID walletId, BigDecimal amount) {
+        walletRepository.addAmount(walletId, amount);
+    }
+
 }
