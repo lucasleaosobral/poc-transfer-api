@@ -2,7 +2,7 @@ package com.example.demo.services;
 
 
 import com.example.demo.data.entities.wallet.UserWalletEntity;
-import com.example.demo.data.repositories.WalletRepository;
+import com.example.demo.data.repositories.wallet.WalletRepository;
 import com.example.demo.utils.Utils;
 import org.springframework.stereotype.Service;
 

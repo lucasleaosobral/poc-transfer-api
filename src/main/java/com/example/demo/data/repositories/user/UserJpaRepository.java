@@ -1,4 +1,4 @@
-package com.example.demo.data.user;
+package com.example.demo.data.repositories.user;
 
 import com.example.demo.data.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

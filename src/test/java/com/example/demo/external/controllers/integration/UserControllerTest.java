@@ -1,6 +1,6 @@
 package com.example.demo.external.controllers.integration;
 
-import com.example.demo.data.user.UserRepository;
+import com.example.demo.data.repositories.user.UserRepository;
 import com.example.demo.external.inputs.CreateUserCommand;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterAll;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -26,15 +25,13 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @LocalServerPort
-    private Integer port;
-
     @Autowired
     UserRepository userRepository;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
             "postgres:15-alpine"
     ).withInitScript("scripts.sql");
+
 
     @BeforeAll
     static void beforeAll() {

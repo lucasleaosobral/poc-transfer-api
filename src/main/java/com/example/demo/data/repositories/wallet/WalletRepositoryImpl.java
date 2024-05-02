@@ -1,4 +1,4 @@
-package com.example.demo.data.repositories;
+package com.example.demo.data.repositories.wallet;
 
 
 import com.example.demo.data.entities.wallet.UserWalletEntity;

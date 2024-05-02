@@ -1,8 +1,8 @@
 package com.example.demo.external.controllers.integration;
 
 
-import com.example.demo.data.repositories.WalletRepository;
-import com.example.demo.data.user.UserRepository;
+import com.example.demo.data.repositories.wallet.WalletRepository;
+import com.example.demo.data.repositories.user.UserRepository;
 import com.example.demo.domain.entities.User;
 import com.example.demo.external.inputs.CreateUserCommand;
 import com.example.demo.external.inputs.TransferAmountCommand;

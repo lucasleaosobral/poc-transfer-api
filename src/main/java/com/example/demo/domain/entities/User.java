@@ -4,6 +4,8 @@ package com.example.demo.domain.entities;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Builder
 @NoArgsConstructor(force = true)
 public class User {
@@ -44,5 +46,18 @@ public class User {
                 ", accountType=" + accountType +
                 ", wallet=" + wallet +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(mail, user.mail) && accountType == user.accountType && Objects.equals(wallet, user.wallet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, mail, accountType, wallet);
     }
 }

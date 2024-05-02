@@ -1,4 +1,4 @@
-package com.example.demo.data.user;
+package com.example.demo.data.repositories.user;
 
 import com.example.demo.data.dto.UserDataMapper;
 import com.example.demo.data.entities.user.UserEntity;
@@ -6,11 +6,14 @@ import com.example.demo.domain.entities.User;
 import com.example.demo.domain.exceptions.UserException;
 import com.example.demo.external.inputs.CreateUserCommand;
 import com.example.demo.services.UserWalletService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Component
+@EnableCaching
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserDataMapper userDataMapper;
@@ -32,6 +35,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Cacheable(value = "userCache")
     public User getById(Long id) {
         Optional<UserEntity> user = userJpaRepository.findById(id);
 

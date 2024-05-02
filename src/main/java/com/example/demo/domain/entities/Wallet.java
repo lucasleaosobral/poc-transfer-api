@@ -1,22 +1,22 @@
 package com.example.demo.domain.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Wallet {
 
     private UUID id;
     private BigDecimal balance;
-
-    public Wallet(UUID id, BigDecimal balance) {
-        this.id = id;
-        this.balance = balance;
-    }
 
     @Override
     public String toString() {
@@ -24,5 +24,18 @@ public class Wallet {
                 "id=" + id +
                 ", balance=" + balance +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wallet wallet = (Wallet) o;
+        return Objects.equals(id, wallet.id) && Objects.equals(balance, wallet.balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, balance);
     }
 }

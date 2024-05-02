@@ -1,4 +1,4 @@
-package com.example.demo.data.user;
+package com.example.demo.data.repositories.user;
 
 import com.example.demo.domain.entities.User;
 import com.example.demo.external.inputs.CreateUserCommand;
