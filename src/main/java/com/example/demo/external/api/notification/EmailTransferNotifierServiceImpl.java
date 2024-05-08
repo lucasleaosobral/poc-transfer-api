@@ -1,6 +1,6 @@
 package com.example.demo.external.api.notification;
 
-import com.example.demo.domain.entities.User;
+import com.example.demo.core.domain.valueobjects.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

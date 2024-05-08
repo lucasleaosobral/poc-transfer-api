@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.data.entities.wallet.UserWalletEntity;
+import com.example.demo.core.model.entities.wallet.UserWalletEntity;
 
 import java.math.BigDecimal;
 import java.util.UUID;

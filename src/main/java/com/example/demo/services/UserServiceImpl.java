@@ -1,8 +1,8 @@
 package com.example.demo.services;
 
 
-import com.example.demo.data.repositories.user.UserRepository;
-import com.example.demo.external.inputs.CreateUserCommand;
+import com.example.demo.core.model.repositories.user.UserRepository;
+import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import org.springframework.stereotype.Service;
 
 @Service

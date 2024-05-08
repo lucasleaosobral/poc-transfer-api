@@ -1,6 +1,6 @@
 package com.example.demo.external.controllers;
 
-import com.example.demo.external.inputs.TransferAmountCommand;
+import com.example.demo.external.controllers.inputs.TransferAmountCommand;
 import com.example.demo.services.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

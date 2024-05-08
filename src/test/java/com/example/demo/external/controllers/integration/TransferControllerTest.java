@@ -1,17 +1,19 @@
 package com.example.demo.external.controllers.integration;
 
 
-import com.example.demo.data.repositories.wallet.WalletRepository;
-import com.example.demo.data.repositories.user.UserRepository;
-import com.example.demo.domain.entities.User;
-import com.example.demo.external.inputs.CreateUserCommand;
-import com.example.demo.external.inputs.TransferAmountCommand;
+import com.example.demo.core.model.repositories.wallet.WalletRepository;
+import com.example.demo.core.model.repositories.user.UserRepository;
+import com.example.demo.core.domain.valueobjects.User;
+import com.example.demo.external.controllers.inputs.CreateUserCommand;
+import com.example.demo.external.controllers.inputs.TransferAmountCommand;
+import com.example.demo.services.cache.Cache;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -42,6 +45,9 @@ public class TransferControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private Cache cache;
+
+    @Autowired
     private WalletRepository walletRepository;
 
 
@@ -54,16 +60,23 @@ public class TransferControllerTest {
             DockerImageName.parse("confluentinc/cp-kafka:latest"));
 
 
+    static GenericContainer<?> redis =
+            new GenericContainer<>(DockerImageName.parse("redis:5.0.3-alpine"))
+                    .withExposedPorts(6379);
+
+
     @BeforeAll
     static void beforeAll() {
         postgres.start();
         kafka.start();
+        redis.start();
     }
 
     @AfterAll
     static void afterAll() {
         postgres.stop();
         kafka.stop();
+        redis.stop();
     }
 
     @DynamicPropertySource
@@ -74,6 +87,10 @@ public class TransferControllerTest {
 
         registry.add("spring.kafka.producer.bootstrap-servers", kafka::getBootstrapServers);
         registry.add("spring.kafka.consumer.bootstrap-servers", kafka::getBootstrapServers);
+
+
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379).toString());
 
     }
 
@@ -185,6 +202,26 @@ public class TransferControllerTest {
                 .andExpect(content().string("Transfer destination is invalid."));
     }
 
+
+    @Test
+    public void shouldNotFindUserAccountTest() throws Exception {
+
+        TransferAmountCommand transferAmountCommand = TransferAmountCommand.builder()
+                .payee(Mockito.anyLong())
+                .payer(Mockito.anyLong())
+                .value(100.00)
+                .build();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(transferAmountCommand);
+
+        mockMvc.perform(
+                        post("/transfer")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                .andExpect(status().is4xxClientError());
+    }
+
     @Test
     public void shouldTransferValidAmountTest() throws Exception {
 
@@ -268,6 +305,7 @@ public class TransferControllerTest {
 
         walletRepository.addAmount(createdUser.getWallet().getId(), BigDecimal.valueOf(100.00));
 
+        cache.flush();
 
         TransferAmountCommand transferAmountCommand = TransferAmountCommand.builder()
                 .payee(storeId)
@@ -332,7 +370,56 @@ public class TransferControllerTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"message\": \"Não autorizado\"}")));
+                        .withBody("{\"message\": \"Unauthorized\"}")));
+
+        mockMvc.perform(
+                        post("/transfer")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldFailAuthorizeTransferAPI() throws Exception {
+
+        CreateUserCommand user = CreateUserCommand
+                .builder()
+                .name("teste")
+                .document("39962054898")
+                .email("123123ssdsds")
+                .password("teste")
+                .build();
+
+        CreateUserCommand store = CreateUserCommand
+                .builder()
+                .name("teste")
+                .document("39962054812189")
+                .email("teste1232345000000000")
+                .password("teste")
+                .build();
+
+        Long userId = userRepository.handleCreateUser(user);
+        Long storeId = userRepository.handleCreateUser(store);
+
+        User createdUser = userRepository.getById(userId);
+
+        walletRepository.addAmount(createdUser.getWallet().getId(), BigDecimal.valueOf(100.00));
+
+
+        TransferAmountCommand transferAmountCommand = TransferAmountCommand.builder()
+                .payee(storeId)
+                .payer(userId)
+                .value(100.00)
+                .build();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(transferAmountCommand);
+
+        stubFor(WireMock.post(urlEqualTo("/"))
+                .willReturn(aResponse()
+                        .withStatus(500)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"message\": \"Internal Server Error\"}")));
 
         mockMvc.perform(
                         post("/transfer")
@@ -367,6 +454,7 @@ public class TransferControllerTest {
 
         walletRepository.addAmount(createdUser.getWallet().getId(), BigDecimal.valueOf(100.00));
 
+        cache.flush();
 
         TransferAmountCommand transferAmountCommand = TransferAmountCommand.builder()
                 .payee(storeId)

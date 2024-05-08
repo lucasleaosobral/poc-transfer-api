@@ -1,12 +1,12 @@
 package com.example.demo.services;
 
-import com.example.demo.data.repositories.user.UserRepository;
-import com.example.demo.domain.entities.Transfer;
-import com.example.demo.domain.entities.User;
-import com.example.demo.domain.events.TransferEvent;
-import com.example.demo.domain.exceptions.TransferException;
+import com.example.demo.core.model.repositories.user.UserRepository;
+import com.example.demo.core.domain.valueobjects.Transfer;
+import com.example.demo.core.domain.valueobjects.User;
+import com.example.demo.core.domain.events.TransferEvent;
+import com.example.demo.core.domain.exceptions.TransferException;
 import com.example.demo.external.api.validators.TransferValidatorService;
-import com.example.demo.external.inputs.TransferAmountCommand;
+import com.example.demo.external.controllers.inputs.TransferAmountCommand;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

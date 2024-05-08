@@ -1,12 +1,12 @@
 package com.example.demo.data.repositories.user.unit;
 
 
-import com.example.demo.data.entities.user.UserEntity;
-import com.example.demo.data.entities.wallet.UserWalletEntity;
-import com.example.demo.data.repositories.user.UserJpaRepository;
-import com.example.demo.data.repositories.user.UserRepository;
-import com.example.demo.domain.entities.AccountType;
-import com.example.demo.domain.entities.User;
+import com.example.demo.core.model.entities.user.UserEntity;
+import com.example.demo.core.model.entities.wallet.UserWalletEntity;
+import com.example.demo.core.model.repositories.user.UserJpaRepository;
+import com.example.demo.core.model.repositories.user.UserRepository;
+import com.example.demo.core.domain.valueobjects.AccountType;
+import com.example.demo.core.domain.valueobjects.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

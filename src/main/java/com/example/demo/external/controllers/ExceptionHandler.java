@@ -1,8 +1,8 @@
 package com.example.demo.external.controllers;
 
-import com.example.demo.domain.exceptions.ExternalServiceException;
-import com.example.demo.domain.exceptions.TransferException;
-import com.example.demo.domain.exceptions.UserException;
+import com.example.demo.core.domain.exceptions.ExternalServiceException;
+import com.example.demo.core.domain.exceptions.TransferException;
+import com.example.demo.core.domain.exceptions.UserException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

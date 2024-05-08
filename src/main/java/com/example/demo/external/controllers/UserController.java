@@ -1,7 +1,7 @@
 package com.example.demo.external.controllers;
 
 
-import com.example.demo.external.inputs.CreateUserCommand;
+import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import com.example.demo.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

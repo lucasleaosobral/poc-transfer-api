@@ -1,7 +1,7 @@
 package com.example.demo.external.controllers.integration;
 
-import com.example.demo.data.repositories.user.UserRepository;
-import com.example.demo.external.inputs.CreateUserCommand;
+import com.example.demo.core.model.repositories.user.UserRepository;
+import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
