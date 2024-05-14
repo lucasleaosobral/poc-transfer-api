@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UserWalletEntity {
+public class UserWalletEntity implements Serializable {
 
     @Id
     private UUID id;

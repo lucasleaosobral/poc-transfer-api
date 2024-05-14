@@ -8,6 +8,7 @@ import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import com.example.demo.services.UserWalletService;
 import com.example.demo.services.cache.Cache;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Component
 @EnableCaching
+@Slf4j
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserDataMapper userDataMapper;
@@ -44,8 +46,10 @@ public class UserRepositoryImpl implements UserRepository {
 
         Optional<UserEntity> fromCache = cache.get(String.valueOf(id), UserEntity.class);
 
-        if (fromCache.isPresent())
+        if (fromCache.isPresent()) {
+            log.info("from cache: {}", fromCache.get().toString());
             return userDataMapper.userEntityToUserDomain(fromCache.get());
+        }
 
         Optional<UserEntity> user = userJpaRepository.findById(id);
 
