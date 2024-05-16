@@ -129,8 +129,7 @@ public class TransferControllerTest {
                         post("/transfer")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Not enough balance."));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -168,8 +167,7 @@ public class TransferControllerTest {
                         post("/transfer")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Stores can't transfer money."));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -198,8 +196,7 @@ public class TransferControllerTest {
                         post("/transfer")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string("Transfer destination is invalid."));
+                .andExpect(status().is4xxClientError());
     }
 
 

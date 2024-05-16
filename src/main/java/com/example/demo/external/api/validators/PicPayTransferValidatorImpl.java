@@ -3,11 +3,15 @@ package com.example.demo.external.api.validators;
 import com.example.demo.core.domain.exceptions.ExternalServiceException;
 import com.example.demo.external.api.ApiResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
 @Log4j2
+@ConditionalOnProperty(
+        value="app.mock-services",
+        havingValue = "false")
 public class PicPayTransferValidatorImpl implements TransferValidatorService {
 
     private final PicPayTransferValidatorService client;

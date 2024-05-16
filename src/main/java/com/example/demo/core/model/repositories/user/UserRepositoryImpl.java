@@ -23,14 +23,12 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
     private final UserWalletService userWalletService;
     private final Cache cache;
-    private final ObjectMapper objectMapper;
 
-    public UserRepositoryImpl(UserDataMapper userDataMapper, UserJpaRepository userJpaRepository, UserWalletService userWalletService, Cache cache, ObjectMapper objectMapper) {
+    public UserRepositoryImpl(UserDataMapper userDataMapper, UserJpaRepository userJpaRepository, UserWalletService userWalletService, Cache cache) {
         this.userDataMapper = userDataMapper;
         this.userJpaRepository = userJpaRepository;
         this.userWalletService = userWalletService;
         this.cache = cache;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -47,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
         Optional<UserEntity> fromCache = cache.get(String.valueOf(id), UserEntity.class);
 
         if (fromCache.isPresent()) {
-            log.info("from cache: {}", fromCache.get().toString());
+            log.info("from cache: {}", fromCache.get());
             return userDataMapper.userEntityToUserDomain(fromCache.get());
         }
 

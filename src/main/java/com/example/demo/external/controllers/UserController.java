@@ -1,6 +1,7 @@
 package com.example.demo.external.controllers;
 
 
+import com.example.demo.external.controllers.inputs.AddAmountCommand;
 import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import com.example.demo.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,12 +28,23 @@ public class UserController {
     @Operation(summary = "Criar novo usuario", description = "Cria um novo usuario", responses = {
             @ApiResponse(description = "Successful response with location header", responseCode = "200", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity createUser(@RequestBody @Valid CreateUserCommand createUserCommand) {
+    public ResponseEntity addMoneyToWallet(@RequestBody @Valid CreateUserCommand createUserCommand) {
 
         Long id = userService.createUser(createUserCommand);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/" + id);
 
         return new ResponseEntity(null, headers, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/wallet")
+    @Operation(summary = "Adicionar valores a carteira", description = "Adicionar valores a carteira", responses = {
+            @ApiResponse(description = "Successful response", responseCode = "200", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity createUser(@RequestBody @Valid AddAmountCommand addAmountCommand) {
+
+        userService.addAmountToWallet(addAmountCommand);
+
+        return new ResponseEntity(null, HttpStatus.OK);
     }
 }

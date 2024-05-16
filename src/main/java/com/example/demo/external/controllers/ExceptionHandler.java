@@ -3,6 +3,7 @@ package com.example.demo.external.controllers;
 import com.example.demo.core.domain.exceptions.ExternalServiceException;
 import com.example.demo.core.domain.exceptions.TransferException;
 import com.example.demo.core.domain.exceptions.UserException;
+import com.example.demo.external.api.ExceptionResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,31 +16,31 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation error: " + e.getMessage());
+    public ExceptionResponse handleValidationException(MethodArgumentNotValidException e) {
+        return new ExceptionResponse("Erro ao validar dados. ",e.getMessage(), HttpStatus.BAD_REQUEST.toString());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleValidationException(DataIntegrityViolationException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data violation error: " + e.getMessage());
+    public ExceptionResponse handleValidationException(DataIntegrityViolationException e) {
+        return new ExceptionResponse("Erro tentar inserir dados. ",e.getMessage(), HttpStatus.BAD_REQUEST.toString());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(UserException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleValidationException(UserException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ExceptionResponse handleValidationException(UserException e) {
+        return new ExceptionResponse("Nao encontrado ", e.getMessage(), HttpStatus.NOT_FOUND.toString());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(TransferException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleValidationException(TransferException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public ExceptionResponse handleValidationException(TransferException e) {
+        return new ExceptionResponse("Erro ao realizar transferencia. ", e.getMessage(), HttpStatus.BAD_REQUEST.toString());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ExternalServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleValidationException(ExternalServiceException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    public ExceptionResponse handleValidationException(ExternalServiceException e) {
+        return new ExceptionResponse("Erro interno na API. ", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.toString());
     }
 }
