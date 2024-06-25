@@ -1,12 +1,14 @@
 package com.example.demo.services.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
+@ConditionalOnProperty(value = "app.cache.type", havingValue = "redis")
 public class RedisService implements Cache {
 
 

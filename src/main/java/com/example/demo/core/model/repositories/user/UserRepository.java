@@ -8,4 +8,6 @@ public interface UserRepository {
     Long handleCreateUser(CreateUserCommand createUserCommand);
 
     User getById(Long id);
+
+    User getFullInfoById(Long id);
 }

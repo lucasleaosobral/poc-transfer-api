@@ -7,7 +7,6 @@ import com.example.demo.core.domain.exceptions.UserException;
 import com.example.demo.external.controllers.inputs.CreateUserCommand;
 import com.example.demo.services.UserWalletService;
 import com.example.demo.services.cache.Cache;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
@@ -56,6 +55,18 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         cache.put(String.valueOf(id), user.get());
+
+        return userDataMapper.userEntityToUserDomain(user.get());
+    }
+
+    @Override
+    public User getFullInfoById(Long id) {
+
+        Optional<UserEntity> user = userJpaRepository.getFullInfo(id);
+
+        if (user.isEmpty()) {
+            throw new UserException("user: " + id + " not found");
+        }
 
         return userDataMapper.userEntityToUserDomain(user.get());
     }

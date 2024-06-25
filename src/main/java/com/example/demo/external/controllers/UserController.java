@@ -1,11 +1,14 @@
 package com.example.demo.external.controllers;
 
 
+import com.example.demo.core.domain.valueobjects.User;
 import com.example.demo.external.controllers.inputs.AddAmountCommand;
 import com.example.demo.external.controllers.inputs.CreateUserCommand;
+import com.example.demo.external.controllers.outputs.UserDTO;
 import com.example.demo.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -47,4 +50,15 @@ public class UserController {
 
         return new ResponseEntity(null, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/info/{userId}")
+    @Operation(summary = "buscar informações do usuario", description = "retorna informações do usuario e da carteira", responses = {
+            @ApiResponse(description = "Successful response", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)))
+    })
+    public ResponseEntity getUser(@PathVariable Long userId) {
+        UserDTO user = userService.getUserFullInfoById(userId);
+
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
 }

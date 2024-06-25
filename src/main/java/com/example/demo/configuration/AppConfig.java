@@ -1,8 +1,5 @@
 package com.example.demo.configuration;
 
-import com.example.demo.services.cache.Cache;
-import com.example.demo.services.cache.RedisService;
-import com.example.demo.services.cache.StubCacheService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -29,8 +26,6 @@ public class AppConfig {
     @Value("${app.cache.ttl}")
     private int redisTTL;
 
-    @Value("${app.cache.type}")
-    private String cacheType;
 
     @Bean
     public Gson gson() {
@@ -79,14 +74,4 @@ public class AppConfig {
         return template;
     }
 
-    @Bean
-    public Cache cache() {
-        if(cacheType.equalsIgnoreCase("stub")) {
-            log.info("starting with stub cache");
-            return new StubCacheService();
-        } else {
-            log.info("starting with redis");
-            return new RedisService();
-        }
-    }
 }
